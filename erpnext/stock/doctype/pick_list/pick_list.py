@@ -73,7 +73,7 @@ class PickList(Document):
 		per_picked = total_picked_qty/total_so_qty * 100
 
 		so_doc.db_set("per_picked", flt(per_picked) ,update_modified=False)
-	
+
 	@frappe.whitelist()
 	def set_item_locations(self, save=False):
 		self.validate_for_qty()
@@ -439,7 +439,7 @@ def create_delivery_note(source_name, target_doc=None):
 			break;
 		if delivery_note:
 			# map all items of all sales orders of that customer
-			for so in sales_dict[customer]:		
+			for so in sales_dict[customer]:
 				map_pl_locations(pick_list.locations,so)
 			delivery_note.insert(ignore_mandatory = True)
 
