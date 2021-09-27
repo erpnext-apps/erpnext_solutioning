@@ -39,6 +39,9 @@ class PickList(Document):
 				# update the picked_qty in SO Item
 				self.update_so(item.sales_order_item,item.picked_qty,item.item_code)
 
+			# update the picked_qty in SO Item
+			self.update_so()
+
 			if not frappe.get_cached_value('Item', item.item_code, 'has_serial_no'):
 				continue
 
