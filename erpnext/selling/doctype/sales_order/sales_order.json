@@ -130,6 +130,7 @@
   "per_delivered",
   "column_break_81",
   "per_billed",
+  "per_picked",
   "billing_status",
   "sales_team_section_break",
   "sales_partner",
@@ -1506,16 +1507,25 @@
    "fieldtype": "Small Text",
    "label": "Dispatch Address",
    "read_only": 1
+  },
+  {
+   "fieldname": "per_picked",
+   "fieldtype": "Percent",
+   "label": "% Picked",
+   "no_copy": 1,
+   "print_hide": 1,
+   "read_only": 1
   }
  ],
  "icon": "fa fa-file-text",
  "idx": 105,
  "is_submittable": 1,
  "links": [],
- "modified": "2021-09-01 15:12:24.115483",
+ "modified": "2021-09-28 16:36:21.227987",
  "modified_by": "Administrator",
  "module": "Selling",
  "name": "Sales Order",
+ "naming_rule": "By \"Naming Series\" field",
  "owner": "Administrator",
  "permissions": [
   {
