@@ -19,6 +19,7 @@ from erpnext.selling.doctype.sales_order.sales_order import (
 )
 from erpnext.stock.get_item_details import get_conversion_factor
 
+
 # TODO: Prioritize SO or WO group warehouse
 
 class PickList(Document):
