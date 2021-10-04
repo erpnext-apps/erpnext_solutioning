@@ -77,7 +77,7 @@ class PickList(Document):
 		per_picked = total_picked_qty/total_so_qty * 100
 
 		so_doc.db_set("per_picked", flt(per_picked) ,update_modified=False)
-	
+
 	@frappe.whitelist()
 	def set_item_locations(self, save=False):
 		self.validate_for_qty()
@@ -159,6 +159,34 @@ class PickList(Document):
 		if self.purpose == "Material Transfer for Manufacture" \
 				and (self.for_qty is None or self.for_qty == 0):
 			frappe.throw(_("Qty of Finished Goods Item should be greater than 0."))
+
+	def before_print(self, settings=None):
+		if self.get("group_same_items"):
+			self.group_similar_items()
+
+	def group_similar_items(self):
+		group_item_qty = {}
+		group_picked_qty = {}
+
+		count = 0
+
+		for item in self.locations:
+			group_item_qty[item.item_code] = group_item_qty.get(item.item_code, 0) + item.qty
+			group_picked_qty[item.item_code] = group_picked_qty.get(item.item_code, 0) + item.qty
+
+		duplicate_list = []
+		for item in self.locations:
+			if item.item_code in group_item_qty:
+				count += 1
+				item.qty = group_item_qty[item.item_code]
+				item.picked_qty = group_picked_qty[item.item_code]
+				item.stock_qty = group_item_qty[item.item_code]
+				item.idx = count
+				del group_item_qty[item.item_code]
+			else:
+				duplicate_list.append(item)
+		for item in duplicate_list:
+			self.remove(item)
 
 
 def validate_item_locations(pick_list):
@@ -415,7 +443,7 @@ def create_delivery_note(source_name, target_doc=None):
 			break;
 		if delivery_note:
 			# map all items of all sales orders of that customer
-			for so in sales_dict[customer]:		
+			for so in sales_dict[customer]:
 				map_pl_locations(pick_list.locations,so)
 			delivery_note.insert(ignore_mandatory = True)
 
